@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Selection Sort Visualizer</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        background-color: #660bdd;
+    }
+    .container {
+        display: flex;
+        align-items: center;
+    }
+    .list {
+        list-style-type: none;
+        padding: 0;
+        margin-right: 20px;
+    }
+    .item {
+        background-color: #2f0353;
+        color: #fff;
+        padding: 18px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    .arrow {
+        margin-left: 10px;
+        color: #2196f3;
+    }
+</style>
+</head>
+<body>
+<div class="container">
+    <ul class="list unsorted">
+        <li class="item">0</li>
+        <li class="item">1</li>
+        <li class="item">2</li>
+        <li class="item">3</li>
+        <li class="item">4</li>
+        <li class="item">5</li>
+        <li class="item">6</li>
+        <li class="item">7</li>
+        <li class="item">8</li>
+    </ul>
+    <div class="arrow-container"></div>
+    <ul class="list sorted"></ul>
+</div>
+
+<script>
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    async function selectionSort() {
+        const unsortedList = document.querySelectorAll('.unsorted .item');
+        const sortedList = document.querySelector('.sorted');
+        const arrowContainer = document.querySelector('.arrow-container');
+
+        for (let i = 0; i < unsortedList.length; i++) {
+            let minIndex = i;
+
+            for (let j = i + 1; j < unsortedList.length; j++) {
+                unsortedList[j].style.backgroundColor = '#f44336';
+                await sleep(500);
+
+                const value1 = parseInt(unsortedList[j].innerText);
+                const value2 = parseInt(unsortedList[minIndex].innerText);
+
+                if (value1 < value2) {
+                    minIndex = j;
+                }
+
+                unsortedList[j].style.backgroundColor = '#4caf50';
+            }
+
+            unsortedList[minIndex].style.backgroundColor = '#ffc107';
+            sortedList.appendChild(unsortedList[minIndex].cloneNode(true));
+            await sleep(500);
+
+            const arrow = document.createElement('span');
+            //arrow.innerText = '→';
+            arrow.className = 'arrow';
+            arrowContainer.appendChild(arrow);
+
+            unsortedList[minIndex].style.backgroundColor = '#4caf50';
+            unsortedList[minIndex].style.display = 'none';
+        }
+    }
+
+    selectionSort();
+</script>
+</body>
+</html>
