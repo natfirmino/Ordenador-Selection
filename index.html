@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Selection Sort Visualizer</title>
+<title>Ordenação por Seleção</title>
 <style>
     body {
         font-family: Arial, sans-serif;
@@ -11,93 +11,75 @@
         justify-content: center;
         align-items: center;
         height: 100vh;
-        margin: 0;
-        background-color: #660bdd;
+        background-color: #f4f4f4;
     }
+
     .container {
-        display: flex;
-        align-items: center;
+        text-align: center;
     }
-    .list {
-        list-style-type: none;
-        padding: 0;
-        margin-right: 20px;
-    }
-    .item {
-        background-color: #2f0353;
-        color: #fff;
-        padding: 18px;
-        margin-bottom: 5px;
-        border-radius: 5px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-    .arrow {
-        margin-left: 10px;
-        color: #2196f3;
+
+    .block {
+        display: inline-block;
+        width: 50px;
+        height: 50px;
+        background-color: dodgerblue;
+        margin: 0 5px;
+        transition: transform 0.3s ease-in-out;
     }
 </style>
 </head>
 <body>
 <div class="container">
-    <ul class="list unsorted">
-        <li class="item">0</li>
-        <li class="item">4</li>
-        <li class="item">7</li>
-        <li class="item">3</li>
-        <li class="item">1</li>
-        <li class="item">5</li>
-        <li class="item">8</li>
-        <li class="item">3</li>
-        <li class="item">6</li>
-    </ul>
-    <div class="arrow-container"></div>
-    <ul class="list sorted"></ul>
+    <h2>Ordenação por Seleção (Selection Sort)</h2>
+    <div id="visualization">
+        <div class="block" style="height: 100px;"></div>
+        <div class="block" style="height: 70px;"></div>
+        <div class="block" style="height: 120px;"></div>
+        <div class="block" style="height: 50px;"></div>
+        <div class="block" style="height: 90px;"></div>
+    </div>
+    <button onclick="selectionSort()">Ordenar</button>
 </div>
 
 <script>
-    function sleep(ms) {
+    async function delay(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     async function selectionSort() {
-        const unsortedList = document.querySelectorAll('.unsorted .item');
-        const sortedList = document.querySelector('.sorted');
-        const arrowContainer = document.querySelector('.arrow-container');
+        var blocks = document.querySelectorAll('.block');
+        var length = blocks.length;
 
-        for (let i = 0; i < unsortedList.length; i++) {
-            let minIndex = i;
+        for (var i = 0; i < length - 1; i++) {
+            var minIndex = i;
+            blocks[minIndex].style.backgroundColor = 'orange';
 
-            for (let j = i + 1; j < unsortedList.length; j++) {
-                unsortedList[j].style.backgroundColor = '#f44336';
-                await sleep(500);
+            for (var j = i + 1; j < length; j++) {
+                blocks[j].style.backgroundColor = 'red';
+                await delay(500);
 
-                const value1 = parseInt(unsortedList[j].innerText);
-                const value2 = parseInt(unsortedList[minIndex].innerText);
-
-                if (value1 < value2) {
+                if (parseInt(blocks[j].style.height) < parseInt(blocks[minIndex].style.height)) {
                     minIndex = j;
                 }
 
-                unsortedList[j].style.backgroundColor = '#4caf50';
+                blocks[j].style.backgroundColor = 'dodgerblue';
             }
 
-            unsortedList[minIndex].style.backgroundColor = '#ffc107';
-            sortedList.appendChild(unsortedList[minIndex].cloneNode(true));
-            await sleep(500);
+            if (minIndex !== i) {
+                await swapBlocks(blocks[i], blocks[minIndex]);
+            }
 
-            const arrow = document.createElement('span');
-            //arrow.innerText = '→';
-            arrow.className = 'arrow';
-            arrowContainer.appendChild(arrow);
-
-            unsortedList[minIndex].style.backgroundColor = '#4caf50';
-            unsortedList[minIndex].style.display = 'none';
+            blocks[i].style.backgroundColor = 'dodgerblue';
         }
     }
 
-    selectionSort();
+    async function swapBlocks(block1, block2) {
+        var tempHeight = block1.style.height;
+        block1.style.height = block2.style.height;
+        block2.style.height = tempHeight;
+
+        await delay(500);
+    }
 </script>
 </body>
 </html>
